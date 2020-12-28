@@ -23,7 +23,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
     />
-
+    <link rel="stylesheet" href="style.css" />
     <title>Text To Mp3</title>
   </head>
   <body>
@@ -32,24 +32,61 @@
       <div class="row mb-5">
         <div class="col">
           <form>
-            <textarea
-              class="form-control"
-              rows="9"
-              id="user-text"
-              placeholder="Your input goes here…"
-            ></textarea>
-            <button
-              class="btn btn-primary btn-lg mt-2 ml-2 float-right"
-              id="convert"
-            >
-              Convert to URL
-            </button>
-            <button
-              class="btn btn-primary btn-lg mt-2 float-right"
-              id="download"
-            >
-              Download MP3
-            </button>
+            <div class="form-group">
+              <textarea
+                class="form-control"
+                rows="9"
+                id="user-text"
+                placeholder="Your input goes here…"
+              ></textarea>
+            </div>
+            <div class="tools">
+              <div class="basic-tool ml-5">
+                <div class="form-group">
+                  <label for="rate">Rate</label>
+                  <div id="rate-value" class="badge badge-primary float-right">
+                    1
+                  </div>
+                  <input
+                    type="range"
+                    class="custom-range mt-2"
+                    id="rate"
+                    min="0.5"
+                    max="2"
+                    value="1"
+                    step="0.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="pitch">Pitch</label>
+                  <div id="pitch-value" class="badge badge-primary float-right">
+                    1
+                  </div>
+                  <input
+                    type="range"
+                    class="custom-range mt-1"
+                    id="pitch"
+                    min="0"
+                    max="2"
+                    value="1"
+                    step="0.1"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="voice-select">Select Voice</label>
+                  <select class="form-control-sm" id="voice-select"></select>
+                </div>
+              </div>
+              <div class="form-group" id="btn-container">
+                <button class="btn btn-primary btn-lg mt-2 ml-2" id="convert">
+                  Convert to URL
+                </button>
+                <button class="btn btn-primary btn-lg mt-2" id="download">
+                  Download MP3
+                </button>
+                <button class="btn btn-light btn-lg btn-block">Speak It</button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
@@ -132,6 +169,18 @@
             "url"
           ).innerHTML = `<a href="${url}">Click to download</a>`;
         });
+      document
+        .getElementById("download")
+        .addEventListener("click", async (e) => {
+          e.preventDefault();
+          const text = document.getElementById("user-text").value;
+          const data = await postData("/convert", { text });
+          const url = data.url;
+          document.getElementById(
+            "url"
+          ).innerHTML = `<a href="${url}">Click to download</a>`;
+        });
     </script>
+    <script src="./app.js"></script>
   </body>
 </html>
